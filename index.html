@@ -20,20 +20,27 @@
     .cat-btn.active { background: #4CAF82; border-color: #4CAF82; color: white; }
     .scene-card { background: white; border-radius: 24px; border: 1.5px solid #C8ECD8; overflow: hidden; }
     .scene-header { background: #EEF8F2; padding: 1rem 1.5rem; border-bottom: 1.5px solid #C8ECD8; display: flex; align-items: center; gap: 10px; }
-    .scene-emoji { font-size: 22px; }
     .scene-title { font-size: 15px; font-weight: 800; color: #2E7D56; }
     .scene-subtitle { font-size: 12px; color: #2E7D56; font-weight: 600; margin-top: 1px; }
-    .scene-body { padding: 1.75rem 1.5rem; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .scene-body { padding: 1.75rem 1.5rem; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     .step-pill { background: #EEF8F2; color: #2E7D56; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 20px; margin-bottom: 1rem; border: 1.5px solid #C8ECD8; }
     .step-instruction { font-size: 15px; font-weight: 700; color: #2E7D56; margin-bottom: 1.5rem; }
-    .sentence-display { font-family: 'Crimson Pro', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1.55; color: #2E7D56; margin-bottom: 1.75rem; min-height: 70px; display: flex; align-items: center; justify-content: center; padding: 0 0.5rem; }
-    .keywords-wrap { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 1.75rem; }
+    .sentence-display { font-family: 'Crimson Pro', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1.55; color: #2E7D56; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; padding: 0 0.5rem; text-align: center; }
+    .chinese-display { font-size: 15px; color: #4a9a6a; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.5; padding: 0 0.5rem; }
+    .keywords-wrap { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 1.5rem; }
     .kw-tag { background: #EEF8F2; color: #2E7D56; padding: 8px 18px; border-radius: 24px; font-size: 19px; font-weight: 800; border: 2px solid #C8ECD8; }
-    .mic-icon { font-size: 40px; margin-bottom: 1.5rem; }
-    .listen-ring { width: 64px; height: 64px; border-radius: 50%; background: #EEF8F2; border: 3px solid #4CAF82; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; animation: ring-pulse 1.2s ease-in-out infinite; }
-    @keyframes ring-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+    .listen-icon { width: 64px; height: 64px; border-radius: 50%; background: #EEF8F2; border: 3px solid #4CAF82; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+    .record-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+    .record-btn { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #4CAF82; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 28px; user-select: none; -webkit-user-select: none; }
+    .record-btn.recording { background: #ffebeb; border-color: #e74c3c; transform: scale(1.08); }
+    .record-status { font-size: 13px; font-weight: 700; color: #2E7D56; }
+    .record-status.active { color: #e74c3c; }
+    .reveal-box { background: #EEF8F2; border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1.5px solid #C8ECD8; width: 100%; }
+    .reveal-en { font-family: 'Crimson Pro', Georgia, serif; font-size: 22px; font-weight: 600; color: #2E7D56; margin-bottom: 6px; }
+    .reveal-zh { font-size: 14px; color: #4a9a6a; font-weight: 600; }
     .go-btn { background: #4CAF82; color: white; border: none; border-radius: 28px; padding: 14px 36px; font-size: 16px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
     .go-btn:hover { background: #2E7D56; transform: scale(1.03); }
+    .go-btn:active { transform: scale(0.97); }
     .start-btn { background: #4CAF82; color: white; border: none; border-radius: 28px; padding: 16px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
     .start-btn:hover { background: #2E7D56; transform: scale(1.03); }
     .progress-row { display: flex; align-items: center; gap: 10px; margin-top: 1.25rem; width: 100%; }
@@ -90,30 +97,32 @@
 
 <script>
 const STEPS = [
-  { label:"Step 1 · Listen", instruction:"Listen carefully. No subtitles.", showText:false, showKeys:false, isListen:true },
-  { label:"Step 2 · Shadow with subtitles", instruction:"Read along and shadow out loud.", showText:true, showKeys:false, isListen:false },
-  { label:"Step 3 · Shadow without subtitles", instruction:"Shadow from memory. No peeking!", showText:false, showKeys:false, isListen:false },
-  { label:"Step 4 · Listen again", instruction:"One more listen.", showText:false, showKeys:false, isListen:true },
-  { label:"Step 5 · Shadow with subtitles", instruction:"Shadow out loud again.", showText:true, showKeys:false, isListen:false },
-  { label:"Step 6 · Shadow without subtitles", instruction:"From memory — you've got this!", showText:false, showKeys:false, isListen:false },
-  { label:"Step 7 · Keywords", instruction:"Use these keywords to guide your shadowing.", showText:false, showKeys:true, isListen:false },
-  { label:"Step 8 · Free recall", instruction:"Say the full sentence completely on your own.", showText:false, showKeys:false, isListen:false },
+  { label:"Step 1 · Listen", instruction:"Listen carefully. No subtitles.", isListen:true, showText:false, showChinese:false, showKeys:false, isRecord:false, isFinalReveal:false },
+  { label:"Step 2 · Shadow with subtitles", instruction:"Read along and shadow out loud.", isListen:false, showText:true, showChinese:true, showKeys:false, isRecord:false, isFinalReveal:false },
+  { label:"Step 3 · Shadow without subtitles", instruction:"Shadow from memory. No peeking!", isListen:false, showText:false, showChinese:false, showKeys:false, isRecord:true, isFinalReveal:false },
+  { label:"Step 4 · Listen again", instruction:"One more listen.", isListen:true, showText:false, showChinese:false, showKeys:false, isRecord:false, isFinalReveal:false },
+  { label:"Step 5 · Shadow with subtitles", instruction:"Shadow out loud again.", isListen:false, showText:true, showChinese:true, showKeys:false, isRecord:false, isFinalReveal:false },
+  { label:"Step 6 · Shadow without subtitles", instruction:"From memory — you've got this!", isListen:false, showText:false, showChinese:false, showKeys:false, isRecord:true, isFinalReveal:false },
+  { label:"Step 7 · Keywords", instruction:"Use these keywords to shadow.", isListen:false, showText:false, showChinese:false, showKeys:true, isRecord:true, isFinalReveal:false },
+  { label:"Step 8 · Free recall", instruction:"Say it from memory — then hear & check!", isListen:false, showText:false, showChinese:false, showKeys:false, isRecord:true, isFinalReveal:true },
 ];
+
 const SCENE_EMOJIS = { academic:"📚", daily:"☕", social:"🎉", work:"💼", conflict:"😤", romance:"💬" };
 let currentType="academic", currentLevel="teen";
 let scenes=[], sceneIndex=0, sentenceIndex=0, stepIndex=0;
 let synth = window.speechSynthesis;
+let mediaRecorder=null, isRecording=false;
 
 document.querySelectorAll('#typeRow .cat-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('#typeRow .cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active'); currentType = btn.dataset.type;
+    document.querySelectorAll('#typeRow .cat-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); currentType=btn.dataset.type;
   });
 });
 document.querySelectorAll('#levelRow .cat-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('#levelRow .cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active'); currentLevel = btn.dataset.level;
+    document.querySelectorAll('#levelRow .cat-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); currentLevel=btn.dataset.level;
   });
 });
 
@@ -121,16 +130,40 @@ function speak(text) {
   synth.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang='en-GB'; utter.rate=0.82;
-  const voices = synth.getVoices();
-  const brit = voices.find(v=>v.lang==='en-GB') || voices.find(v=>v.lang.startsWith('en'));
-  if (brit) utter.voice = brit;
+  const voices=synth.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(brit) utter.voice=brit;
   synth.speak(utter);
+}
+
+async function toggleRecord() {
+  if(isRecording) {
+    if(mediaRecorder) { mediaRecorder.stop(); mediaRecorder.stream.getTracks().forEach(t=>t.stop()); }
+    isRecording=false;
+    const btn=document.getElementById('recordBtn');
+    const status=document.getElementById('recordStatus');
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤';}
+    if(status){status.textContent='Tap to record';status.classList.remove('active');}
+  } else {
+    try {
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRecorder=new MediaRecorder(stream);
+      mediaRecorder.start();
+      isRecording=true;
+      const btn=document.getElementById('recordBtn');
+      const status=document.getElementById('recordStatus');
+      if(btn){btn.classList.add('recording');btn.textContent='⏹';}
+      if(status){status.textContent='Recording... tap to stop';status.classList.add('active');}
+    } catch(e) {
+      alert('Microphone access denied. Please allow microphone in browser settings.');
+    }
+  }
 }
 
 async function startSession() {
   renderLoading();
-  const levelDesc = currentLevel==='teen' ? 'British/American teenagers aged 14-17' : 'British/American university students aged 18-22';
-  const topics = {
+  const levelDesc=currentLevel==='teen'?'British/American teenagers aged 14-17':'British/American university students aged 18-22';
+  const topics={
     academic:'academic life (class discussions, exams, assignments, teachers, studying)',
     daily:'everyday routines (morning, meals, commute, home life, shopping)',
     social:'social situations (parties, hanging out, catching up with friends)',
@@ -138,67 +171,77 @@ async function startSession() {
     conflict:'emotional or conflict situations (arguments, disappointment, frustration, making up)',
     romance:'relationships and romantic situations (crushes, dating, heartbreak, friendship)'
   };
-  const prompt = `Create 4 short realistic dialogue scenes for ${levelDesc} about ${topics[currentType]}. Each scene has exactly 5 lines spoken by different characters. Use natural, colloquial British and American English — like TV dramas Skins, Normal People, Sex Education, Euphoria, Derry Girls. Each line should be 8-16 words. Return ONLY a JSON array, no markdown: [{"scene":"short scene title","context":"one sentence setting the scene","lines":[{"speaker":"Name","text":"sentence","keywords":["word1","word2","word3"]},...]},...]`;
-
+  const prompt=`Create 2 short realistic dialogue scenes for ${levelDesc} about ${topics[currentType]}. Each scene has exactly 5 lines by different characters. Use natural, colloquial British and American English. Each line 8-16 words. Return ONLY JSON, no markdown:
+[{"scene":"title","context":"one sentence context","lines":[{"speaker":"Name","text":"English sentence","chinese":"中文翻译","keywords":["word1","word2","word3"]},...]},...]`;
   try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
-    const data = await res.json();
-    scenes = JSON.parse(data.content);
-    sceneIndex=0; sentenceIndex=0; stepIndex=0;
-    renderDots(); renderStep();
-  } catch(e) {
-    renderError("Couldn't load scenes. Please try again.");
-  }
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const data=await res.json();
+    scenes=JSON.parse(data.content);
+    sceneIndex=0;sentenceIndex=0;stepIndex=0;
+    renderDots();renderStep();
+  } catch(e){ renderError("Couldn't load scenes. Please try again."); }
 }
 
 function renderDots() {
-  document.getElementById('sceneDots').innerHTML = scenes.map((_,i)=>`<div class="dot ${i===sceneIndex?'active':i<sceneIndex?'done':''}" id="dot${i}"></div>`).join('');
+  document.getElementById('sceneDots').innerHTML=scenes.map((_,i)=>`<div class="dot ${i===sceneIndex?'active':i<sceneIndex?'done':''}" id="dot${i}"></div>`).join('');
 }
 function updateDots() {
-  scenes.forEach((_,i)=>{ const d=document.getElementById('dot'+i); if(d) d.className='dot '+(i===sceneIndex?'active':i<sceneIndex?'done':''); });
+  scenes.forEach((_,i)=>{const d=document.getElementById('dot'+i);if(d)d.className='dot '+(i===sceneIndex?'active':i<sceneIndex?'done':'');});
 }
-function currentLine() { return scenes[sceneIndex].lines[sentenceIndex]; }
+function currentLine(){return scenes[sceneIndex].lines[sentenceIndex];}
 
 function nextStep() {
-  if (stepIndex < STEPS.length-1) {
-    stepIndex++; renderStep();
-    if (STEPS[stepIndex].isListen) speak(currentLine().text);
+  if(isRecording) toggleRecord();
+  if(stepIndex<STEPS.length-1){
+    stepIndex++;renderStep();
+    if(STEPS[stepIndex].isListen) speak(currentLine().text);
   } else {
     sentenceIndex++;
-    if (sentenceIndex >= scenes[sceneIndex].lines.length) {
+    if(sentenceIndex>=scenes[sceneIndex].lines.length){
       sceneIndex++;
-      if (sceneIndex >= scenes.length) { startSession(); return; }
-      sentenceIndex=0; updateDots();
+      if(sceneIndex>=scenes.length){startSession();return;}
+      sentenceIndex=0;updateDots();
     }
-    stepIndex=0; renderStep();
+    stepIndex=0;renderStep();
   }
 }
 
 function renderStep() {
-  const scene=scenes[sceneIndex], line=currentLine(), step=STEPS[stepIndex];
-  const progress = Math.round((stepIndex/STEPS.length)*100);
+  const scene=scenes[sceneIndex],line=currentLine(),step=STEPS[stepIndex];
+  const progress=Math.round((stepIndex/STEPS.length)*100);
   let bodyHTML='';
-  if (step.isListen) {
-    bodyHTML=`<div class="listen-ring"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 7h3l4-4v14l-4-4H4V7zm9 3a3 3 0 0 0-3-3v1.5A1.5 1.5 0 0 1 11.5 10 1.5 1.5 0 0 1 10 11.5V13a3 3 0 0 0 3-3z" fill="#2E7D56"/></svg></div>`;
-    setTimeout(()=>speak(line.text), 350);
-  } else if (step.showText) {
+
+  if(step.isFinalReveal) {
+    bodyHTML=`
+      <div class="record-wrap">
+        <button class="record-btn" id="recordBtn" onclick="toggleRecord()">🎤</button>
+        <div class="record-status" id="recordStatus">Tap to record</div>
+      </div>
+      <div class="reveal-box">
+        <div class="reveal-en">"${line.text}"</div>
+        <div class="reveal-zh">${line.chinese}</div>
+      </div>`;
+    setTimeout(()=>speak(line.text),400);
+  } else if(step.isListen) {
+    bodyHTML=`<div class="listen-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 8h4l5-5v18l-5-5H5V8zm11 4a4 4 0 0 0-4-4v2a2 2 0 0 1 0 4v2a4 4 0 0 0 4-4z" fill="#4CAF82"/></svg></div>`;
+  } else if(step.showText) {
     bodyHTML=`<div class="sentence-display">"${line.text}"</div>`;
-  } else if (step.showKeys) {
+    if(step.showChinese) bodyHTML+=`<div class="chinese-display">${line.chinese}</div>`;
+  } else if(step.showKeys) {
     bodyHTML=`<div class="keywords-wrap">${line.keywords.map(k=>`<span class="kw-tag">${k}</span>`).join('')}</div>`;
-  } else {
-    bodyHTML=`<div class="mic-icon">🎤</div>`;
+    bodyHTML+=`<div class="record-wrap"><button class="record-btn" id="recordBtn" onclick="toggleRecord()">🎤</button><div class="record-status" id="recordStatus">Tap to record</div></div>`;
+  } else if(step.isRecord) {
+    bodyHTML=`<div class="record-wrap"><button class="record-btn" id="recordBtn" onclick="toggleRecord()">🎤</button><div class="record-status" id="recordStatus">Tap to record</div></div>`;
   }
+
   const isLastStep=stepIndex===STEPS.length-1;
   const isLastLine=sentenceIndex===scenes[sceneIndex].lines.length-1;
   const isLastScene=sceneIndex===scenes.length-1;
   const btnLabel=isLastStep?(isLastLine?(isLastScene?"New scenes ✨":"Next scene →"):"Next line →"):(step.isListen?"I've listened →":"Done →");
+
   document.getElementById('sceneCard').innerHTML=`
     <div class="scene-header">
-      <span class="scene-emoji">${SCENE_EMOJIS[currentType]||'🎭'}</span>
+      <span style="font-size:22px">${SCENE_EMOJIS[currentType]||'🎭'}</span>
       <div><div class="scene-title">${scene.scene}</div><div class="scene-subtitle">${scene.context}</div></div>
     </div>
     <div class="scene-body">
